@@ -6,7 +6,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,19 +29,24 @@ public class RobotAlpha extends LinearOpMode {
         DcMotor FRDrive = null;
         DcMotor BLDrive = null;
         DcMotor BRDrive = null;
+        CRServo LeftBall = null;
+        CRServo RightBall = null;
 
         //Write numerical variables here
         double desiredHeading = 0;
-
         FLDrive = hardwareMap.get(DcMotor.class, "FLDrive");
         FRDrive = hardwareMap.get(DcMotor.class, "FRDrive");
         BLDrive = hardwareMap.get(DcMotor.class, "BLDrive");
         BRDrive = hardwareMap.get(DcMotor.class, "BRDrive");
+        LeftBall = hardwareMap.get(CRServo.class, "LeftBall");
+        RightBall = hardwareMap.get(CRServo.class, "RightBall");
 
         FLDrive.setDirection(DcMotor.Direction.REVERSE);
         BLDrive.setDirection(DcMotor.Direction.REVERSE);
         FRDrive.setDirection(DcMotor.Direction.REVERSE);
         BRDrive.setDirection(DcMotor.Direction.REVERSE);
+        LeftBall.setDirection(CRServo.Direction.REVERSE);
+        RightBall.setDirection(CRServo.Direction.FORWARD);
 
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
@@ -88,6 +95,11 @@ public class RobotAlpha extends LinearOpMode {
                 speedMultiplier = 1.0;
             }
 
+            if(gamepad1.dpad_up){
+                LeftBall.setPower(0.5);
+                RightBall.setPower(0.5);
+            }
+
             double botHeadingDeg = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
             double rotate = botHeadingDeg - desiredHeading; // algorithm for automatic turning
             rotate += 540;
@@ -114,6 +126,9 @@ public class RobotAlpha extends LinearOpMode {
             FRDrive.setPower(frontRightPower * speedMultiplier);
             BRDrive.setPower(backRightPower * speedMultiplier);
 
+            if(((gamepad1.right_trigger)>.05) && ((gamepad1.left_trigger))>.05){
+                imu.resetYaw();
+            }
 
         }
 
