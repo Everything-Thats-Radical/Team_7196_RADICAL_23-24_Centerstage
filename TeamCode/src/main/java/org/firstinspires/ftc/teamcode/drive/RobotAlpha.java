@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 //import org.firstinspires.ftc.teamcode.util.Encoder;
 
-@TeleOp (name = "V1.0", group = "Iterative Opmode")
+@TeleOp(name = "V1.0", group = "Iterative Opmode")
 public class RobotAlpha extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,8 +29,8 @@ public class RobotAlpha extends LinearOpMode {
         DcMotor FRDrive = null;
         DcMotor BLDrive = null;
         DcMotor BRDrive = null;
-        CRServo LeftBall = null;
-        CRServo RightBall = null;
+        CRServo LeftWheel = null;
+        CRServo RightWheel = null;
 
         //Write numerical variables here
         double desiredHeading = 0;
@@ -38,15 +38,15 @@ public class RobotAlpha extends LinearOpMode {
         FRDrive = hardwareMap.get(DcMotor.class, "FRDrive");
         BLDrive = hardwareMap.get(DcMotor.class, "BLDrive");
         BRDrive = hardwareMap.get(DcMotor.class, "BRDrive");
-        LeftBall = hardwareMap.get(CRServo.class, "LeftBall");
-        RightBall = hardwareMap.get(CRServo.class, "RightBall");
+        LeftWheel = hardwareMap.get(CRServo.class, "LeftWheel");
+        RightWheel = hardwareMap.get(CRServo.class, "RightWheel");
 
         FLDrive.setDirection(DcMotor.Direction.REVERSE);
         BLDrive.setDirection(DcMotor.Direction.REVERSE);
         FRDrive.setDirection(DcMotor.Direction.REVERSE);
         BRDrive.setDirection(DcMotor.Direction.REVERSE);
-        LeftBall.setDirection(CRServo.Direction.REVERSE);
-        RightBall.setDirection(CRServo.Direction.FORWARD);
+        LeftWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        RightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
@@ -95,10 +95,15 @@ public class RobotAlpha extends LinearOpMode {
                 speedMultiplier = 1.0;
             }
 
-            if(gamepad1.dpad_up){
-                LeftBall.setPower(0.5);
-                RightBall.setPower(0.5);
+            if (gamepad2.y) {
+                LeftWheel.setPower(1);
+                RightWheel.setPower(-1);
+            } else {
+                LeftWheel.setPower(0.0);
+                RightWheel.setPower(0.0);
             }
+            telemetry.addData("servo positions", LeftWheel.getPower());
+            telemetry.update();
 
             double botHeadingDeg = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
             double rotate = botHeadingDeg - desiredHeading; // algorithm for automatic turning

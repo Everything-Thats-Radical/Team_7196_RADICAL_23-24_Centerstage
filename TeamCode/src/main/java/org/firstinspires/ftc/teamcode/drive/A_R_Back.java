@@ -57,6 +57,11 @@ public class A_R_Back extends LinearOpMode{
         double aHeading = 180;
 
         //TODO: WRITE YOUR AUTO CODE HERE!
+        driveStraight(10);
+        turnToAngle(90.0);
+        driveStraight(20);
+        turnToAngle(180);
+
 
 
     }
@@ -91,13 +96,10 @@ public class A_R_Back extends LinearOpMode{
     }
 
 
-
-
-
-
     int inchesToTicks(double inches){
         return (int) inches*134;
     }
+
 
     void turnToAngle(double angle) {
         double botHeadingDeg = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
@@ -116,6 +118,11 @@ public class A_R_Back extends LinearOpMode{
         }
     }
 
-
+    public void stopMove() {
+        FLDrive.setPower(0);
+        FRDrive.setPower(0);
+        BLDrive.setPower(0);
+        BRDrive.setPower(0);
+    }
 
 }
