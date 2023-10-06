@@ -20,6 +20,8 @@ public class A_R_Back extends LinearOpMode{
     DcMotor BRDrive = null;
     IMU imu = null;
 
+
+
     public void runOpMode() throws InterruptedException {
 
 
@@ -63,9 +65,8 @@ public class A_R_Back extends LinearOpMode{
         turnToAngle(180);
 
 
-
     }
-
+    //Goes straight. Ronit did it
     void driveStraight(double inches){
         double i = inches;
         int ticks = inchesToTicks(i);
@@ -101,7 +102,8 @@ public class A_R_Back extends LinearOpMode{
     }
 
 
-    void turnToAngle(double angle) {
+    //This turns the robot.Don't question it Will did it.
+     void turnToAngle(double angle) {
         double botHeadingDeg = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         double rotate = botHeadingDeg - angle; // algorithm for automatic turning
         rotate += 540;
